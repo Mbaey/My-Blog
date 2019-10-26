@@ -74,7 +74,7 @@ CREATE TABLE `tb_blog` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (`blog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB CHARACTER SET = utf8mb4 ROW_FORMAT = Dynamic;
 
 /*Data for the table `tb_blog` */
 

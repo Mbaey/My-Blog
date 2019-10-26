@@ -8,6 +8,7 @@ import com.site.blog.my.core.entity.Blog;
 import com.site.blog.my.core.entity.BlogCategory;
 import com.site.blog.my.core.entity.BlogTag;
 import com.site.blog.my.core.entity.BlogTagRelation;
+import com.site.blog.my.core.service.BlogEsService;
 import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.util.MarkDownUtil;
 import com.site.blog.my.core.util.PageQueryUtil;
@@ -15,6 +16,7 @@ import com.site.blog.my.core.util.PageResult;
 import com.site.blog.my.core.util.PatternUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -36,7 +38,8 @@ public class BlogServiceImpl implements BlogService {
     private BlogTagRelationMapper blogTagRelationMapper;
     @Autowired
     private BlogCommentMapper blogCommentMapper;
-
+    @Autowired
+    private BlogEsService blogEsService;
     @Override
     @Transactional
     public String saveBlog(Blog blog) {
@@ -282,6 +285,29 @@ public class BlogServiceImpl implements BlogService {
             List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
             int total = blogMapper.getTotalBlogs(pageUtil);
             PageResult pageResult = new PageResult(blogListVOS, total, pageUtil.getLimit(), pageUtil.getPage());
+            return pageResult;
+        }
+        return null;
+    }
+
+    @Override
+    public PageResult getBlogsPageByEsSearch(String keyword, int page) {
+        if (page > 0 && PatternUtil.validKeyword(keyword)) {
+            Map param = new HashMap();
+            param.put("page", page);
+            param.put("limit", 9);
+            param.put("keyword", keyword);
+            param.put("blogStatus", 1);//过滤发布状态下的数据
+            PageQueryUtil pageUtil = new PageQueryUtil(param);
+            final Page<Blog> pageBody = blogEsService.pageQuery(page-1, 9, keyword);
+            //内容
+            List<Blog> blogList = pageBody.getContent();
+            //总数
+            Long total = pageBody.getTotalElements();
+
+            List<BlogListVO> blogListVOS = getBlogListVOsByBlogs(blogList);
+
+            PageResult pageResult = new PageResult(blogListVOS, total.intValue(), pageUtil.getLimit(), pageUtil.getPage());
             return pageResult;
         }
         return null;

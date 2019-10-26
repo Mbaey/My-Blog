@@ -176,7 +176,8 @@ public class MyBlogController {
      */
     @GetMapping({"/search/{keyword}/{page}"})
     public String search(HttpServletRequest request, @PathVariable("keyword") String keyword, @PathVariable("page") Integer page) {
-        PageResult blogPageResult = blogService.getBlogsPageBySearch(keyword, page);
+        PageResult blogPageResult = blogService.getBlogsPageByEsSearch(keyword, page);
+
         request.setAttribute("blogPageResult", blogPageResult);
         request.setAttribute("pageName", "搜索");
         request.setAttribute("pageUrl", "search");

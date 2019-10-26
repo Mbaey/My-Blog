@@ -77,12 +77,21 @@ public interface BlogService {
 
     /**
      * 根据搜索获取文章列表
-     *
+     *mysql 模糊匹配
      * @param keyword
      * @param page
      * @return
      */
     PageResult getBlogsPageBySearch(String keyword, int page);
+
+    /**
+     * 根据搜索获取文章列表
+     * elasticsearch
+     * @param keyword
+     * @param page
+     * @return
+     */
+    PageResult getBlogsPageByEsSearch(String keyword, int page);
 
     BlogDetailVO getBlogDetailBySubUrl(String subUrl);
 }

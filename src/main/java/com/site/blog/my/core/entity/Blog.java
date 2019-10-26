@@ -1,10 +1,13 @@
 package com.site.blog.my.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.util.Date;
-
+@Document(indexName = "blog")
 public class Blog {
+    @Id
     private Long blogId;
 
     private String blogTitle;

@@ -15,3 +15,7 @@
 #### 20190902
 
 * 添加开发文档[《SpringBoot + Mybatis + Thymeleaf 搭建美观实用的个人博客》](https://www.shiyanlou.com/courses/1367)
+
+#### 20191026
+
+加入elasticsearch，可以对文章内容进行检索。
